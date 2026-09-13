@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>偏差値計算ツール</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f7fb;margin:0;padding:20px;color:#222}
+.card{max-width:430px;margin:auto;background:white;border-radius:18px;padding:22px;box-shadow:0 5px 20px #0001}
+h1{font-size:24px;margin:0 0 18px;text-align:center}
+label{display:block;font-weight:700;margin:14px 0 6px}
+input{box-sizing:border-box;width:100%;padding:13px;font-size:18px;border:1px solid #ccc;border-radius:10px}
+button{width:100%;padding:14px;margin-top:18px;border:0;border-radius:10px;font-size:18px;font-weight:700;background:#333;color:white}
+.result{margin-top:20px;text-align:center;background:#f0f3f8;border-radius:12px;padding:18px}
+.score{font-size:34px;font-weight:800}
+.formula,.info{margin-top:18px;padding:15px;border-radius:10px;line-height:1.8}
+.formula{background:#fafafa}
+.info{background:#fff8f8;font-size:14px}
+.formula-line{display:flex;align-items:center;justify-content:center;gap:2px;white-space:nowrap}.fraction{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 5px;line-height:1.2}
+.fraction .top{border-bottom:1px solid #222;padding:0 7px 4px}
+.fraction .bottom{padding-top:4px}
+.note{font-size:13px;color:#666;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>📊 偏差値計算ツール</h1>
+
+<label for="avg">平均点</label>
+<input id="avg" type="number" step="0.1" placeholder="例:50">
+
+<label for="mine">あなたの得点</label>
+<input id="mine" type="number" step="0.1" placeholder="例:80">
+
+<label for="sd">標準偏差 <span style="color:red;font-size:12px;">※</span></label>
+<input id="sd" type="number" step="0.1" placeholder="例:18">
+
+<button onclick="calc()">偏差値を計算</button>
+
+<div class="result">
+<div>あなたの偏差値</div>
+<div class="score" id="result">---</div>
+</div>
+
+<div class="formula">
+<b>偏差値の求め方</b><br><br>
+<div class="formula-line">
+偏差値 ＝ 50 ＋ 10 ×
+<span class="fraction">
+<span class="top">あなたの得点 − 平均点</span>
+<span class="bottom">標準偏差</span>
+</span>
+</div>
+<br>
+つまり、<strong>「平均点からどれくらい離れているか」</strong>を<br>
+標準偏差で割って、偏差値に直します。
+</div>
+
+<div class="info">
+<b>※ 標準偏差とは？</b><br>
+点数が平均点のまわりに、どれくらいバラついているかを表す数値です。
+<br><br>
+<b>標準偏差はどうやって求める？</b><br>
+① 全員の点数から平均点を引く<br>
+② それぞれを2乗する<br>
+③ その平均を出す<br>
+④ その平方根（√）を求める<br>
+→ これが標準偏差です。
+</div>
+
+<div class="note">※ 標準偏差が0以下の場合は計算できません。</div>
+</div>
+
+<script>
+function calc(){
+ const avg=Number(document.getElementById("avg").value);
+ const mine=Number(document.getElementById("mine").value);
+ const sd=Number(document.getElementById("sd").value);
+ const out=document.getElementById("result");
+
+ if(!Number.isFinite(avg)||!Number.isFinite(mine)||!Number.isFinite(sd)||sd<=0){
+   out.textContent="入力を確認";
+   return;
+ }
+
+ const hensachi=50+10*(mine-avg)/sd;
+ out.textContent=hensachi.toFixed(1);
+}
+</script>
+</body>
+</html>
